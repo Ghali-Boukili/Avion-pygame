@@ -11,8 +11,10 @@ pygame.display.set_caption("Super Plane")
 
 
 # Chargement des images:
+#    On définit et affecte les variables qui contiendront les images du vaisseau ou de l'alien
 imageAvion = pygame.image.load("plane.png")
 imageAvion = pygame.transform.scale(imageAvion, (72, 48))
+imageAvion1 = pygame.transform.scale(imageAvion, (144, 96))
 imageAvionPerdu = pygame.image.load("planePerdu.png")
 imageAvionPerdu = pygame.transform.scale(imageAvionPerdu, (72, 48))
 imageNuage = pygame.image.load("Cloud.png")
@@ -31,7 +33,7 @@ texteDebut2 = fontDebut1.render("---> Appuyez sur 'ENTREE' pour quitter", True, 
 positionTexteDebut2 = texteDebut2.get_rect(center=(366, 270))
 
 fontDebut3 = pygame.font.SysFont("Confortaa", 80)
-texteDebut3 = fontDebut3.render("Super Plane", True, (255, 230, 0))
+texteDebut3 = fontDebut3.render("Super Plane", True, (255, 180, 0))
 positionTexteDebut3 = texteDebut3.get_rect(center=(400, 40))
 
 fontFin = pygame.font.SysFont("Arial", 100)
@@ -80,11 +82,12 @@ def dessiner():
     global fenetre, debutJeu
     
     if not debutJeu:
-        fenetre.fill((211, 211,211))  # Fond noir
+        fenetre.fill((211, 211,211))  # Fond gris
         fenetre.blit(texteDebut1, positionTexteDebut1)
         fenetre.blit(texteDebut2, positionTexteDebut2)
         fenetre.blit(texteDebut3, positionTexteDebut3)
-        # fenetre.blit(texteDebut2, positionTexteDebut)
+        fenetre.blit(imageAvion1, (330,350))
+        
     
     
     else :
@@ -172,6 +175,4 @@ while continuer==1:
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
-
 
