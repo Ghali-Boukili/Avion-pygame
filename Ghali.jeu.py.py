@@ -25,14 +25,14 @@ FondBleu = pygame.transform.scale(FondBleu, (800, 500))
 
 
 fontDebut1 = pygame.font.SysFont("Knewave", 40)
-texteDebut1 = fontDebut1.render("---> Appuyez sur ESPACE pour commencer ", True, (0, 0, 0))
+texteDebut1 = fontDebut1.render("---> Appuyez sur 'ESPACE' pour commencer ", True, (0, 0, 0))
 positionTexteDebut1 = texteDebut1.get_rect(center=(400, 220))  # centré
 
-texteDebut2 = fontDebut1.render("---> Appuyez sur ENTREE pour quitter", True, (0, 0, 0))
-positionTexteDebut2 = texteDebut2.get_rect(center=(378, 270))
+texteDebut2 = fontDebut1.render("---> Appuyez sur 'ENTREE' pour quitter", True, (0, 0, 0))
+positionTexteDebut2 = texteDebut2.get_rect(center=(366, 270))
 
 fontDebut3 = pygame.font.SysFont("Confortaa", 80)
-texteDebut3 = fontDebut3.render("Super Plane", True, (255, 200, 0))
+texteDebut3 = fontDebut3.render("Super Plane", True, (255, 230, 0))
 positionTexteDebut3 = texteDebut3.get_rect(center=(400, 40))
 
 fontFin = pygame.font.SysFont("Arial", 100)
@@ -62,10 +62,18 @@ score = 0
 Porte1 = (1,random.randint(80,400))
 Porte2 = (1,Porte1[1]+60)
 Porte3 = (50,Porte1[1])
+
 rectPorte1 = pygame.Rect(Porte1[0], Porte1[1], 50, 3)
 rectPorte2 = pygame.Rect(Porte2[0], Porte2[1], 50, 3)
 rectPorte3 = pygame.Rect(Porte3[0], Porte1[1], 2, 62)
 
+rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
+
+for positionAlien in Aliens :
+    rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45,40)
+
+for positionNuage in Nuages:
+    rectNuage = pygame.Rect(Porte3[0], Porte1[1], 75,70)
 
 debutJeu = False 
 
@@ -73,7 +81,7 @@ def dessiner():
     global fenetre, debutJeu
     
     if not debutJeu:
-        fenetre.fill((255, 255,255))  # Fond noir
+        fenetre.fill((211, 211,211))  # Fond noir
         fenetre.blit(texteDebut1, positionTexteDebut1)
         fenetre.blit(texteDebut2, positionTexteDebut2)
         fenetre.blit(texteDebut3, positionTexteDebut3)
@@ -108,6 +116,7 @@ def gererClavierEtSouris():
     touchesPressees = pygame.key.get_pressed()
     if not debutJeu:
         if touchesPressees[pygame.K_SPACE]:
+            pygame.time.wait(1000)
             debutJeu = True
         elif touchesPressees[pygame.K_RETURN]:
             continuer = 0 
@@ -143,9 +152,6 @@ while continuer==1:
     dessiner()
     gererClavierEtSouris()
 
-    
-    
-    
     for i in range(len(Nuages)):
             Nuages[i] = (Nuages[i][0]+a, Nuages[i][1])
             if Nuages[i][0] > 800:
@@ -155,13 +161,18 @@ while continuer==1:
                 a += 0.05
                 score = 1
                 
+                
+    if rectAvion.colliderect(rectAlien):
+        positionAvion.remove()
+        imageAvion = imageAvionPerdu
+        for i in range(len(positionAvion)):
+            positionAvion[i] = (positionAvion[i][0],positionAvion[i][1]+4) 
+                
     
 
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
-
 
 
 
