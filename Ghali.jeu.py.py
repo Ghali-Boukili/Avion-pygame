@@ -53,12 +53,16 @@ positionAlien = (200,200)
 # définir le nb d'aliens et comment ils sont espacés entre eux horizontalement et verticalement 
 Aliens = [(110+i*60,110+j*50)for i in range(3) for j in range(6)] # i : nb d'aliens horizontalement et j : nb d'aliens verticalement
 
+boules = []
+bombes = []
 
 Nuages = [(110+i*50,40+j*40) for i in range(6) for j in range(1)]
 nouveauxNuages = (0,9)
+
 a = 3
 niveau= 1
 score = 0
+m=2
 
 Porte1 = (1,random.randint(80,400))
 Porte2 = (1,Porte1[1]+60)
@@ -67,6 +71,8 @@ Porte3 = (50,Porte1[1])
 rectPorte1 = pygame.Rect(Porte1[0], Porte1[1], 50, 3)
 rectPorte2 = pygame.Rect(Porte2[0], Porte2[1], 50, 3)
 rectPorte3 = pygame.Rect(Porte3[0], Porte1[1], 2, 62)
+
+  
 
 rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
 
@@ -133,10 +139,10 @@ def gererClavierEtSouris():
             positionAvion = ( positionAvion[0] , positionAvion[1]-5)
         if touchesPressees[pygame.K_DOWN] == True and positionAvion[1]<452:
             positionAvion = ( positionAvion[0]  , positionAvion[1]+5)
-        if touchesPressees[pygame.K_RIGHT] == True and positionAvion[0]<728:
+        if touchesPressees[pygame.K_RIGHT] == True and positionAvion[0]<728 and positionAvion[0]>0:
             positionAvion = ( positionAvion[0] + 2 , positionAvion[1])
-        if touchesPressees[pygame.K_LEFT] == True and positionAvion[0]>0:
-            positionAvion = ( positionAvion[0] - 2 , positionAvion[1])
+        #if touchesPressees[pygame.K_LEFT] == True and positionAvion[0]>0:
+            #positionAvion = ( positionAvion[0] - 2 , positionAvion[1])
     #else :
         #if
 
@@ -149,8 +155,8 @@ continuer = 1
 while continuer==1:
     # pygame permet de fixer la vitesse de notre boucle:
     # ici on déclare 50 tours par secondes soit une animation à 50 images par secondes
-    clock.tick(50) 
-
+    clock.tick(50)
+    positionAvion = (positionAvion[0] - 0.4, positionAvion[1])
     dessiner()
     gererClavierEtSouris()
 
@@ -163,7 +169,16 @@ while continuer==1:
                 a += 0.05
                 score = 1
                 
-                
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if rectAvion.colliderect(rectAlien):
         positionAvion.remove()
         imageAvion = imageAvionPerdu
@@ -171,8 +186,32 @@ while continuer==1:
             positionAvion[i] = (positionAvion[i][0],positionAvion[i][1]+4) 
                 
     
+    
+    # On vérifie si on doit inverser la direction AVANT de rebouger encore
+    for alien in Aliens:
+        if alien[1] + m >= 450 or alien[1] + m <= 100:
+            m = m*(-1)
+            break
+
+    # déplace tt les aliens en mm temps
+    for i in range(len(Aliens)):
+        if positionAvion != (-1, -1):
+            Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
+
+
 
