@@ -11,7 +11,6 @@ pygame.display.set_caption("Super Plane")
 
 
 # Chargement des images:
-#    On définit et affecte les variables qui contiendront les images du vaisseau ou de l'alien
 imageAvion = pygame.image.load("plane.png")
 imageAvion = pygame.transform.scale(imageAvion, (72, 48))
 imageAvionPerdu = pygame.image.load("planePerdu.png")
