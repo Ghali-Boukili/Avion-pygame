@@ -18,6 +18,7 @@ imageAvionPerdu = pygame.image.load("planePerdu.png")
 imageAvionPerdu = pygame.transform.scale(imageAvionPerdu, (72, 48))
 imageAlien = pygame.image.load("alien2.png")
 imageNuage = pygame.image.load("Cloud.png")
+imageNuage = pygame.transform.scale(imageNuage,(75,70))
 FondBleu = pygame.image.load("fondBleu.png")
 FondBleu = pygame.transform.scale(FondBleu, (800, 500))
 
@@ -25,24 +26,41 @@ FondBleu = pygame.transform.scale(FondBleu, (800, 500))
 # On définit les variables qui contiendront les positions des différents éléments (vaisseau, alien, projectile)
 # Chaque position est un couple de valeur '(x,y)'
 
-positionAvion = (738,250)
+positionAvion = (728,250)
+positionNuage = (0,9)
+
+Nuages = [(110+i*50,40+j*40) for i in range(6) for j in range(1)]
+nouveauxNuages = (0,9)
+a = 3
+niveau= 1
+score = 0
+
+Porte1 = (1,random.randint(80,400))
+Porte2 = (1,Porte1[1]+60)
+Porte3 = (50,Porte1[1])
+rectPorte1 = pygame.Rect(Porte1[0], Porte1[1], 50, 3)
+rectPorte2 = pygame.Rect(Porte2[0], Porte2[1], 50, 3)
+rectPorte3 = pygame.Rect(Porte3[0], Porte1[1], 2, 62)
 
 
-# Fonction en charge de dessiner tous les éléments sur notre fenêtre graphique.
-# Cette fonction sera appelée depuis notre boucle infinie
 def dessiner():
     global fenetre
-    # On remplit complètement notre fenêtre avec la couleur noire: (0,0,0)
-    # Ceci permet de 'nettoyer' notre fenêtre avant de la dessiner
     
     fenetre.blit(FondBleu, (0,0))
     fenetre.blit(imageAvion, positionAvion) # On dessine l'image du vaisseau à sa position
+    
+    for positionNuage in Nuages:
+        fenetre.blit(imageNuage, positionNuage)
+    
+    pygame.draw.rect(fenetre, (0,0,0), rectPorte1, 5)    
+    pygame.draw.rect(fenetre, (0,0,0), rectPorte2, 5)
+    pygame.draw.rect(fenetre, (255,255,255), rectPorte3, 10)
+    
     
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
 
 # Fonction en charge de gérer les évènements clavier (ou souris)
-# Cette fonction sera appelée depuis notre boucle infinie
 def gererClavierEtSouris():
     global positionAvion
     for event in pygame.event.get():
@@ -56,7 +74,7 @@ def gererClavierEtSouris():
      #   projectiles.append((positionVaisseau[0]+32,positionVaisseau[1]))
      #   nbproj=nbproj-1
      #   appui=True
-    if touchesPressees[pygame.K_UP] == True and positionAvion[1]>0:
+    if touchesPressees[pygame.K_UP] == True and positionAvion[1]>80:
         positionAvion = ( positionAvion[0] , positionAvion[1]-5)
     if touchesPressees[pygame.K_DOWN] == True and positionAvion[1]<452:
         positionAvion = ( positionAvion[0]  , positionAvion[1]+5)
@@ -79,6 +97,19 @@ while continuer==1:
     dessiner()
     gererClavierEtSouris()
 
+    
+    
+    
+    for i in range(len(Nuages)):
+            Nuages[i] = (Nuages[i][0]+a, Nuages[i][1])
+            if Nuages[i][0] > 800:
+                Nuages[i] = nouveauxNuages
+            if score != 0 and score % 10 == 0:
+                niveau += 1
+                a += 0.05
+                score = 1
+                
+    
 
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
