@@ -123,8 +123,10 @@ def dessiner():
             
         afficheBoules = arial.render("boules: "+str(nbB),True,pygame.Color(0,0,0))
         afficheScore = arial.render("vies: "+str(vies),True,pygame.Color(0,0,0))
+        afficheNiveau = arial.render("niveau: "+str(niveau),True,pygame.Color(0,0,0))
         fenetre.blit(afficheScore, (730,460)) # afficher le score en bas à droite de l'ecran ainsi que le nb de boules
         fenetre.blit(afficheBoules, (730,480))
+        fenetre.blit(afficheNiveau, (10,480))
             
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
@@ -294,10 +296,18 @@ while continuer==1:
     while (-1,-1) in Aliens:
         Aliens.remove((-1,-1))
     
-    
-    
-    
-    
+    if len(Aliens) == 0:
+        if niveau < 3:
+            niveau += 1
+            m += 0.5
+        else:
+            m = 0
+        positionAvion = positionAvionInitiale
+        Aliens = [(110+i*60,110+j*50) for i in range(3) for j in range(6)]
+        bombes.clear()
+        boules.clear()
+        tempsAffichageNiveau = 50  # Nombre de frames pour afficher le message (~1 seconde)
+         continue
     
     
     
@@ -309,6 +319,5 @@ while continuer==1:
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
 
 
