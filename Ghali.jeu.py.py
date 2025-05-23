@@ -27,6 +27,10 @@ FondGris = pygame.image.load("fond_gris.png")
 FondGris = pygame.transform.scale(FondGris, (800, 500))
 FondStar = pygame.image.load("star.png")
 FondStar = pygame.transform.scale(FondStar, (200, 200))
+FondEgout = pygame.image.load("fond_0.png")
+FondEgout = pygame.transform.scale(FondEgout, (800, 500))
+
+
 
 
 fontDebut1 = pygame.font.SysFont("Knewave", 40)
@@ -38,7 +42,7 @@ positionTexteDebut2 = texteDebut2.get_rect(center=(366, 270))
 
 fontDebut3 = pygame.font.SysFont("Confortaa", 80)
 texteDebut3 = fontDebut3.render("Super Plane", True, (255, 180, 0))
-positionTexteDebut3 = texteDebut3.get_rect(center=(400, 40))
+positionTexteDebut3 = texteDebut3.get_rect(center=(400, 70))
 
 fontFin = pygame.font.SysFont("Arial", 100)
 texteFin = fontFin.render("T'ES GUEZ", True, (255, 255, 255))
@@ -50,6 +54,7 @@ positionTexteFin = texteFin.get_rect(center=(420, 300))
 # Chaque position est un couple de valeur '(x,y)'
 
 positionAvion = (728,250)
+positionAvionInitiale = positionAvion
 positionNuage = (0,9)
 
 positionAlien = (200,200)
@@ -64,10 +69,10 @@ nbB = 40
 Nuages = [(110+i*50,40+j*40) for i in range(6) for j in range(1)]
 nouveauxNuages = (0,8)
 
-a = 3
+a = 3 # vitesse des nuages
 niveau= 1
 score = 0
-m=2
+m=2 # vitesse des aliens
 
 vies = 3
 
@@ -81,15 +86,6 @@ rectPorte1 = pygame.Rect(Porte1[0], Porte1[1], 50, 3)
 rectPorte2 = pygame.Rect(Porte2[0], Porte2[1], 50, 3)
 rectPorte3 = pygame.Rect(Porte3[0], Porte1[1], 2, 62)
 
-  
-
-rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
-
-for positionAlien in Aliens :
-    rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45,40)
-
-for positionNuage in Nuages:
-    rectNuage = pygame.Rect(Porte3[0], Porte1[1], 75,70)
 
 debutJeu = False 
 
@@ -103,9 +99,8 @@ def dessiner():
         fenetre.blit(texteDebut3, positionTexteDebut3)
         fenetre.blit(imageAvion1, (330,350))
     #elif niveau == 1:
-        fenetre.blit(FondStar, (0,0))
-    
-    
+        #fenetre.blit(FondStar, (0,0))
+        #pygame.time.wait(2000)
     else :
         fenetre.blit(FondBleu, (0,0))
         fenetre.blit(imageAvion, positionAvion) # On dessine l'image du vaisseau à sa position
@@ -118,13 +113,16 @@ def dessiner():
         
         pygame.draw.rect(fenetre, (0,0,0), rectPorte1, 5)    
         pygame.draw.rect(fenetre, (0,0,0), rectPorte2, 5)
-        pygame.draw.rect(fenetre, (255,255,255),rectPorte3, 10)
+        pygame.draw.rect(fenetre, (255,255,255),rectPorte3, 10) # une porte qui s'affiche aléatoirement en mm position [0]
         
         for boule in boules:
             pygame.draw.circle(fenetre, (0,0,0), boule, 6)
+        
+        for bombe in bombes:
+            pygame.draw.circle(fenetre, (91, 60, 17), bombe, 10)
             
         afficheBoules = arial.render("boules: "+str(nbB),True,pygame.Color(0,0,0))
-        afficheScore = arial.render("score: "+str(score),True,pygame.Color(0,0,0))
+        afficheScore = arial.render("vies: "+str(vies),True,pygame.Color(0,0,0))
         fenetre.blit(afficheScore, (730,460)) # afficher le score en bas à droite de l'ecran ainsi que le nb de boules
         fenetre.blit(afficheBoules, (730,480))
             
@@ -146,6 +144,7 @@ def gererClavierEtSouris():
         elif touchesPressees[pygame.K_RETURN]:
             continuer = 0 
     elif debutJeu :
+        
         if touchesPressees[pygame.K_SPACE] == False:
             appui=False
         if touchesPressees[pygame.K_SPACE] == True and nbB>0 and appui == False:
@@ -173,38 +172,96 @@ while continuer==1:
     # pygame permet de fixer la vitesse de notre boucle:
     # ici on déclare 50 tours par secondes soit une animation à 50 images par secondes
     clock.tick(50)
-    positionAvion = (positionAvion[0] - 0.4, positionAvion[1])
+    if positionAvion[0] > 0 : # pour que l'avion ne sorte pas de l'écran à gauche
+        positionAvion = (positionAvion[0] - 0.5, positionAvion[1])
     
     
     dessiner()
     gererClavierEtSouris()
 
     for i in range(len(Nuages)):
-            Nuages[i] = (Nuages[i][0]+a, Nuages[i][1])
-            if Nuages[i][0] > 800:
-                Nuages[i] = nouveauxNuages
-            if score != 0 :
-                niveau += 1
-                a += 0.05
-                score = 1
+        Nuages[i] = (Nuages[i][0]+a, Nuages[i][1])
+        if Nuages[i][0] > 800:
+            Nuages[i] = nouveauxNuages # reviens à la position initiale
+        if score != 0 :
+            niveau += 1
+            a += 0.05
+            score = 1
                 
     
     for i in range(len(boules)):
         boules[i]=(boules[i][0]-5,boules[i][1])
+        if boules[i][0]<0:
+            boules[i]=(-1,-1)
+        
+    for i in range(len(bombes)):
+        bombes[i] = (bombes[i][0] + 5, bombes[i][1])
+        if bombes[i][0] > 800:
+            bombes[i] = (-1, -1)
     
     
+    if random.randint(0,100)<3: # 2 tirés
+        proba=random.randint(0,len(Aliens)-1)
+        bombes.append((Aliens[proba][0]+16,Aliens[proba][1]+30)) 
+        
+
+
+    for positionBoule in boules:
+        rectBoule = pygame.Rect(positionBoule[0], positionBoule[1], 6, 6)
+
+    for i in range(len(bombes)):
+        rectBombe = pygame.Rect(bombes[i][0], bombes[i][1], 8, 8)  
+ 
+    rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
+
+    for positionAlien in Aliens :
+        rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45,40)
+
+    for positionNuage in Nuages:
+        rectNuage = pygame.Rect(Porte3[0], Porte1[1], 75,70)
     
     
+    # Gestion des collisions avec les aliens
+    for positionAlien in Aliens:
+        rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45, 40)
+        if rectAvion.colliderect(rectAlien):
+            imageAvion = imageAvionPerdu
+             # fait tomber l'avion 
+            while positionAvion[1] < 500:
+                positionAvion = (positionAvion[0], positionAvion[1] + 4)
+                dessiner()
+                clock.tick(50)
+            continuer = 0  # fin du jeu
     
-    if rectAvion.colliderect(rectAlien):
-        positionAvion.remove()
-        imageAvion = imageAvionPerdu
-        for i in range(len(positionAvion)):
-            positionAvion[i] = (positionAvion[i][0],positionAvion[i][1]+4) 
+    for positionAlien in Aliens[:]:  # On parcourt une copie
+        rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45, 40)
+        for positionBoule in boules[:]:  # Pareil pour les boules
+            rectBoule = pygame.Rect(positionBoule[0], positionBoule[1], 6, 6)
+            if rectBoule.colliderect(rectAlien):
+                Aliens.remove(positionAlien)  # Supprime l'alien
+                boules.remove(positionBoule)  # Supprime la boule
+                break  # On arrête la boucle pour cette boule
+      
+    for positionBombe in bombes[:]:  
+        rectBombe = pygame.Rect(positionBombe[0], positionBombe[1], 10, 10)
+        if rectBombe.colliderect(rectAvion):
+            bombes.remove(positionBombe)
+            vies = vies - 1
+            if vies == 0:
+                imageAvion = imageAvionPerdu
+                while positionAvion[1] < 500:
+                    positionAvion = (positionAvion[0], positionAvion[1] + 4)
+                    dessiner()
+                    clock.tick(50)
+                continuer = 0  
+                
+            # fait tomber l'avion
+            
+            
                 
     
     
-    # On vérifie si on doit inverser la direction AVANT de rebouger encore
+    # On vérifie si on doit inverser la direction des aliens avant qu'ils rebougent
     for alien in Aliens:
         if alien[1] + m >= 450 or alien[1] + m <= 100:
             m = m*(-1)
@@ -215,13 +272,43 @@ while continuer==1:
         if positionAvion != (-1, -1):
             Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
             
+            
+    
+    # positionner les bombes des aliens 
+    #if continuer != 0 :
+    #    for i in range(len(Aliens)) :
+    #        for i in range(len(bombes)):
+    #            bombes[i] = (Aliens[-1][0],Aliens[-1][1])
+    #            bombes[i] = (bombes[i][0]+5,bombes[i][1])
+    
+      
+        
+                
+            
+    while (-1,-1) in boules:
+        boules.remove((-1,-1))
+    
+    while (-1,-1) in bombes:
+        bombes.remove((-1,-1))
+    
+    while (-1,-1) in Aliens:
+        Aliens.remove((-1,-1))
     
     
-  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
 
 
 
