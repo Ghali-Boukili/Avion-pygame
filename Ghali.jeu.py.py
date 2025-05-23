@@ -178,7 +178,7 @@ while continuer==1:
                 a += 0.05
                 score = 1
                 
-
+    
     
     
     
@@ -203,6 +203,7 @@ while continuer==1:
     for i in range(len(Aliens)):
         if positionAvion != (-1, -1):
             Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
+            
     
     
     
@@ -218,6 +219,7 @@ while continuer==1:
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
+
 
 
 
