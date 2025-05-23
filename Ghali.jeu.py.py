@@ -307,7 +307,7 @@ while continuer==1:
         bombes.clear()
         boules.clear()
         tempsAffichageNiveau = 50  # Nombre de frames pour afficher le message (~1 seconde)
-         continue
+        continue
     
     
     
