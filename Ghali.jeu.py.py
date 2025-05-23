@@ -59,6 +59,7 @@ Aliens = [(110+i*60,110+j*50)for i in range(3) for j in range(6)] # i : nb d'ali
 
 boules = []
 bombes = []
+nbB = 40
 
 Nuages = [(110+i*50,40+j*40) for i in range(6) for j in range(1)]
 nouveauxNuages = (0,8)
@@ -69,6 +70,8 @@ score = 0
 m=2
 
 vies = 3
+
+arial = pygame.font.SysFont("arial",15)
 
 Porte1 = (1,random.randint(80,400))
 Porte2 = (1,Porte1[1]+60)
@@ -115,15 +118,22 @@ def dessiner():
         
         pygame.draw.rect(fenetre, (0,0,0), rectPorte1, 5)    
         pygame.draw.rect(fenetre, (0,0,0), rectPorte2, 5)
-        pygame.draw.rect(fenetre, (255,255,255), rectPorte3, 10)
+        pygame.draw.rect(fenetre, (255,255,255),rectPorte3, 10)
         
-    
+        for boule in boules:
+            pygame.draw.circle(fenetre, (0,0,0), boule, 6)
+            
+        afficheBoules = arial.render("boules: "+str(nbB),True,pygame.Color(0,0,0))
+        afficheScore = arial.render("score: "+str(score),True,pygame.Color(0,0,0))
+        fenetre.blit(afficheScore, (730,460)) # afficher le score en bas à droite de l'ecran ainsi que le nb de boules
+        fenetre.blit(afficheBoules, (730,480))
+            
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
 
 # Fonction en charge de gérer les évènements clavier (ou souris)
 def gererClavierEtSouris():
-    global positionAvion, debutJeu, continuer
+    global positionAvion, debutJeu, continuer, nbB, boules, appui
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # Permet de gérer un clic sur le bouton de fermeture de la fenêtre
             continuer = 0
@@ -137,11 +147,11 @@ def gererClavierEtSouris():
             continuer = 0 
     elif debutJeu :
         if touchesPressees[pygame.K_SPACE] == False:
-            appui=False 
-    #if touchesPressees[pygame.K_SPACE] == True and appui==False and nbproj>0:
-     #   projectiles.append((positionVaisseau[0]+32,positionVaisseau[1]))
-     #   nbproj=nbproj-1
-     #   appui=True
+            appui=False
+        if touchesPressees[pygame.K_SPACE] == True and nbB>0 and appui == False:
+            boules.append((positionAvion[0],positionAvion[1]+26))
+            nbB = nbB-1
+            appui=True
         if touchesPressees[pygame.K_UP] == True and positionAvion[1]>80:
             positionAvion = ( positionAvion[0] , positionAvion[1]-4)
         if touchesPressees[pygame.K_DOWN] == True and positionAvion[1]+20<452:
@@ -179,7 +189,8 @@ while continuer==1:
                 score = 1
                 
     
-    
+    for i in range(len(boules)):
+        boules[i]=(boules[i][0]-5,boules[i][1])
     
     
     
@@ -206,16 +217,7 @@ while continuer==1:
             
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
+  
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
