@@ -311,7 +311,12 @@ while continuer==1:
         tempsAffichageNiveau = 50  
         continue
     
-    
+    for positionBoule in boules[:]:
+        rectBoule = pygame.Rect(positionBoule[0], positionBoule[1], 6, 6)
+        if rectBoule.colliderect(rectPorte3):
+            vies += 1
+            boules.remove(positionBoule)
+            break  
     
     
     
