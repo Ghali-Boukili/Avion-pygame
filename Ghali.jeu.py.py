@@ -300,13 +300,15 @@ while continuer==1:
         if niveau < 3:
             niveau += 1
             m += 0.5
+            nbB = 40
         else:
             m = 0
         positionAvion = positionAvionInitiale
         Aliens = [(110+i*60,110+j*50) for i in range(3) for j in range(6)]
+        nbB = 40
         bombes.clear()
         boules.clear()
-        tempsAffichageNiveau = 50  # Nombre de frames pour afficher le message (~1 seconde)
+        tempsAffichageNiveau = 50  
         continue
     
     
@@ -319,5 +321,4 @@ while continuer==1:
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
 
