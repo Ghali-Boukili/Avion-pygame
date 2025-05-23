@@ -23,6 +23,10 @@ imageAlien = pygame.image.load("alien2.png")
 imageAlien = pygame.transform.scale(imageAlien,(45,40))
 FondBleu = pygame.image.load("fondBleu.png")
 FondBleu = pygame.transform.scale(FondBleu, (800, 500))
+FondGris = pygame.image.load("fond_gris.png")
+FondGris = pygame.transform.scale(FondGris, (800, 500))
+FondStar = pygame.image.load("star.png")
+FondStar = pygame.transform.scale(FondStar, (200, 200))
 
 
 fontDebut1 = pygame.font.SysFont("Knewave", 40)
@@ -57,12 +61,14 @@ boules = []
 bombes = []
 
 Nuages = [(110+i*50,40+j*40) for i in range(6) for j in range(1)]
-nouveauxNuages = (0,9)
+nouveauxNuages = (0,8)
 
 a = 3
 niveau= 1
 score = 0
 m=2
+
+vies = 3
 
 Porte1 = (1,random.randint(80,400))
 Porte2 = (1,Porte1[1]+60)
@@ -88,12 +94,13 @@ def dessiner():
     global fenetre, debutJeu
     
     if not debutJeu:
-        fenetre.fill((211, 211,211))  # Fond gris
+        fenetre.blit(FondGris,(0,0))  # Fond gris
         fenetre.blit(texteDebut1, positionTexteDebut1)
         fenetre.blit(texteDebut2, positionTexteDebut2)
         fenetre.blit(texteDebut3, positionTexteDebut3)
         fenetre.blit(imageAvion1, (330,350))
-        
+    #elif niveau == 1:
+        fenetre.blit(FondStar, (0,0))
     
     
     else :
@@ -109,7 +116,7 @@ def dessiner():
         pygame.draw.rect(fenetre, (0,0,0), rectPorte1, 5)    
         pygame.draw.rect(fenetre, (0,0,0), rectPorte2, 5)
         pygame.draw.rect(fenetre, (255,255,255), rectPorte3, 10)
-    
+        
     
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
@@ -136,13 +143,13 @@ def gererClavierEtSouris():
      #   nbproj=nbproj-1
      #   appui=True
         if touchesPressees[pygame.K_UP] == True and positionAvion[1]>80:
-            positionAvion = ( positionAvion[0] , positionAvion[1]-5)
-        if touchesPressees[pygame.K_DOWN] == True and positionAvion[1]<452:
-            positionAvion = ( positionAvion[0]  , positionAvion[1]+5)
-        if touchesPressees[pygame.K_RIGHT] == True and positionAvion[0]<728 and positionAvion[0]>0:
+            positionAvion = ( positionAvion[0] , positionAvion[1]-4)
+        if touchesPressees[pygame.K_DOWN] == True and positionAvion[1]+20<452:
+            positionAvion = ( positionAvion[0]  , positionAvion[1]+4)
+        if touchesPressees[pygame.K_RIGHT] == True and positionAvion[0]<728 and positionAvion[0]>0 and positionAvion[1]+20<452:
             positionAvion = ( positionAvion[0] + 2 , positionAvion[1])
         #if touchesPressees[pygame.K_LEFT] == True and positionAvion[0]>0:
-            #positionAvion = ( positionAvion[0] - 2 , positionAvion[1])
+            positionAvion = ( positionAvion[0] , positionAvion[1]+2)
     #else :
         #if
 
@@ -157,6 +164,8 @@ while continuer==1:
     # ici on déclare 50 tours par secondes soit une animation à 50 images par secondes
     clock.tick(50)
     positionAvion = (positionAvion[0] - 0.4, positionAvion[1])
+    
+    
     dessiner()
     gererClavierEtSouris()
 
@@ -169,10 +178,7 @@ while continuer==1:
                 a += 0.05
                 score = 1
                 
-    
-    
-    
-    
+
     
     
     
