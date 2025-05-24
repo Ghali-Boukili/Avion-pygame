@@ -48,8 +48,8 @@ texteDebut3 = fontDebut3.render("Super Plane", True, (255, 180, 0))
 texteFin = fontFin.render("T'ES GUEZ", True, (255, 255, 255))
 texteFin2 = fontFin.render("T'ES CHAUD TOI !", True, (255, 255, 255))
 positionTexteDebut3 = texteDebut3.get_rect(center=(400, 70))
-positionTexteFin = texteFin.get_rect(center=(400, 300))
-positionTexteFin2 = texteFin2.get_rect(center=(420, 300))
+positionTexteFin = texteFin.get_rect(center=(420, 300))
+positionTexteFin2 = texteFin2.get_rect(center=(400, 300))
 
 
 # On définit les variables qui contiendront les positions des différents éléments (vaisseau, alien, projectile)
@@ -100,9 +100,7 @@ def dessiner():
         fenetre.blit(texteDebut2, positionTexteDebut2)
         fenetre.blit(texteDebut3, positionTexteDebut3)
         fenetre.blit(imageAvion1, (330,350))
-    #elif niveau == 1:
-        #fenetre.blit(FondStar, (0,0))
-        #pygame.time.wait(2000)
+    
     else :
         fenetre.blit(FondBleu, (0,0))
         fenetre.blit(imageAvion, positionAvion) # On dessine l'image du vaisseau à sa position
@@ -133,10 +131,18 @@ def dessiner():
         rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
         if rectAvion.colliderect(rectPorte3) and niveau==10:
             fenetre.blit(texteFin2, positionTexteFin2)
-            pygame.display.update()                     
+            pygame.display.update()                      
             pygame.time.wait(2000)                       
             pygame.quit()                               
-            sys.exit() 
+            sys.exit()
+        
+        if vies == 0:
+            fenetre.blit(texteFin, positionTexteFin)
+            pygame.display.update()                      
+            pygame.time.wait(4000)                       
+            pygame.quit()                               
+            sys.exit()
+        
             
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
@@ -292,7 +298,7 @@ while continuer==1:
     if len(Aliens) == 0:
         if niveau < 10:
             niveau += 1
-            bombes[i] = (bombes[i][0] + 5, bombes[i][1]) # ne pas accélérer à chaque niveau sinon impossible de gagner --> +5 puis normal 
+            bombes[i] = (bombes[i][0] + 5, bombes[i][1])
             m +=2 
             nbB = 40
         else:
@@ -311,9 +317,7 @@ while continuer==1:
             boules.remove(positionBoule)
             break  
     
+     
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
-
-
