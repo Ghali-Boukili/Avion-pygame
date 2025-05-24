@@ -131,13 +131,19 @@ def dessiner():
         fenetre.blit(afficheNiveau, (10,480))
         
         rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
-        if rectAvion.colliderect(rectPorte3) and niveau==10:
+        if rectAvion.colliderect(rectPorte3) : # SECRET DU jeu : si collision de l'avion avec la porte 3, on gagne
             fenetre.blit(texteFin2, positionTexteFin2)
             pygame.display.update()                      
             pygame.time.wait(2000)                       
             pygame.quit()                               
             sys.exit()
-        
+        if  niveau==10:
+            fenetre.blit(texteFin2, positionTexteFin2)
+            pygame.display.update()                      
+            pygame.time.wait(2000)                       
+            pygame.quit()                               
+            sys.exit()
+            
         if vies == 0 and positionAvion[1]>500:
             fenetre.blit(texteFin, positionTexteFin)
             pygame.display.update()                      
@@ -274,9 +280,7 @@ while continuer==1:
                 continuer = 0  
                 
             # fait tomber l'avion
-     
-    
-            
+
     # On vérifie si on doit inverser la direction des aliens avant qu'ils rebougent
     for alien in Aliens:
         if alien[1] + m >= 450 or alien[1] + m <= 100:
@@ -299,7 +303,7 @@ while continuer==1:
         Aliens.remove((-1,-1))
     
     if len(Aliens) == 0:
-        if niveau < 10:
+        if niveau <= 10:
             niveau += 1
             bombes[i] = (bombes[i][0] + b, bombes[i][1])
             m +=2
@@ -325,4 +329,3 @@ while continuer==1:
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
