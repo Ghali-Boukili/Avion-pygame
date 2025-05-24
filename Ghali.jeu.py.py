@@ -40,14 +40,16 @@ positionTexteDebut1 = texteDebut1.get_rect(center=(400, 220))  # centré
 texteDebut2 = fontDebut1.render("---> Appuyez sur 'ENTREE' pour quitter", True, (0, 0, 0))
 positionTexteDebut2 = texteDebut2.get_rect(center=(366, 270))
 
-fontDebut3 = pygame.font.SysFont("Confortaa", 80)
-texteDebut3 = fontDebut3.render("Super Plane", True, (255, 180, 0))
-positionTexteDebut3 = texteDebut3.get_rect(center=(400, 70))
 
 fontFin = pygame.font.SysFont("Arial", 100)
-texteFin = fontFin.render("T'ES GUEZ", True, (255, 255, 255))
-positionTexteFin = texteFin.get_rect(center=(420, 300))
 
+fontDebut3 = pygame.font.SysFont("Confortaa", 80)
+texteDebut3 = fontDebut3.render("Super Plane", True, (255, 180, 0))
+texteFin = fontFin.render("T'ES GUEZ", True, (255, 255, 255))
+texteFin2 = fontFin.render("T'ES CHAUD TOI !", True, (255, 255, 255))
+positionTexteDebut3 = texteDebut3.get_rect(center=(400, 70))
+positionTexteFin = texteFin.get_rect(center=(400, 300))
+positionTexteFin2 = texteFin2.get_rect(center=(420, 300))
 
 
 # On définit les variables qui contiendront les positions des différents éléments (vaisseau, alien, projectile)
@@ -127,6 +129,12 @@ def dessiner():
         fenetre.blit(afficheScore, (730,460)) # afficher le score en bas à droite de l'ecran ainsi que le nb de boules
         fenetre.blit(afficheBoules, (730,480))
         fenetre.blit(afficheNiveau, (10,480))
+        
+        rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
+        if rectAvion.colliderect(rectPorte3):
+            fenetre.blit(texteFin2, positionTexteFin2)
+            pygame.time.wait(2000)
+            pygame.quit()
             
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
@@ -223,8 +231,7 @@ while continuer==1:
         rectNuage = pygame.Rect(Porte3[0], Porte1[1], 75,70)
     
     
-
-# Gestion des collisions avec les aliens
+    # Gestion des collisions avec les aliens
     for positionAlien in Aliens:
         rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45, 40)
         if rectAvion.colliderect(rectAlien):
@@ -259,9 +266,8 @@ while continuer==1:
                 continuer = 0  
                 
             # fait tomber l'avion
-            
 
-
+    
     
     # On vérifie si on doit inverser la direction des aliens avant qu'ils rebougent
     for alien in Aliens:
@@ -273,8 +279,9 @@ while continuer==1:
     for i in range(len(Aliens)):
         if positionAvion != (-1, -1):
             Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
+
+    
             
-                    
     while (-1,-1) in boules:
         boules.remove((-1,-1))
     
@@ -306,10 +313,9 @@ while continuer==1:
             boules.remove(positionBoule)
             break  
     
-     
+        
 
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
-
 
