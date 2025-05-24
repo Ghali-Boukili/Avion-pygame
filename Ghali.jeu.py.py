@@ -292,7 +292,7 @@ while continuer==1:
     if len(Aliens) == 0:
         if niveau < 10:
             niveau += 1
-            bombes[i] = (bombes[i][0] + 5, bombes[i][1])
+            bombes[i] = (bombes[i][0] + 5, bombes[i][1]) # ne pas accélérer à chaque niveau sinon impossible de gagner --> +5 puis normal 
             m +=2 
             nbB = 40
         else:
