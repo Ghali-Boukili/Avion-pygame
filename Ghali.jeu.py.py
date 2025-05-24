@@ -223,7 +223,8 @@ while continuer==1:
         rectNuage = pygame.Rect(Porte3[0], Porte1[1], 75,70)
     
     
-    # Gestion des collisions avec les aliens
+
+# Gestion des collisions avec les aliens
     for positionAlien in Aliens:
         rectAlien = pygame.Rect(positionAlien[0], positionAlien[1], 45, 40)
         if rectAvion.colliderect(rectAlien):
@@ -259,9 +260,8 @@ while continuer==1:
                 
             # fait tomber l'avion
             
-            
-                
-    
+
+
     
     # On vérifie si on doit inverser la direction des aliens avant qu'ils rebougent
     for alien in Aliens:
@@ -274,19 +274,7 @@ while continuer==1:
         if positionAvion != (-1, -1):
             Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
             
-            
-    
-    # positionner les bombes des aliens 
-    #if continuer != 0 :
-    #    for i in range(len(Aliens)) :
-    #        for i in range(len(bombes)):
-    #            bombes[i] = (Aliens[-1][0],Aliens[-1][1])
-    #            bombes[i] = (bombes[i][0]+5,bombes[i][1])
-    
-      
-        
-                
-            
+                    
     while (-1,-1) in boules:
         boules.remove((-1,-1))
     
@@ -297,9 +285,10 @@ while continuer==1:
         Aliens.remove((-1,-1))
     
     if len(Aliens) == 0:
-        if niveau < 3:
+        if niveau < 10:
             niveau += 1
-            m += 0.5
+            bombes[i] = (bombes[i][0] + 5, bombes[i][1])
+            m +=2 
             nbB = 40
         else:
             m = 0
@@ -307,8 +296,7 @@ while continuer==1:
         Aliens = [(110+i*60,110+j*50) for i in range(3) for j in range(6)]
         nbB = 40
         bombes.clear()
-        boules.clear()
-        tempsAffichageNiveau = 50  
+        boules.clear()  
         continue
     
     for positionBoule in boules[:]:
@@ -318,12 +306,10 @@ while continuer==1:
             boules.remove(positionBoule)
             break  
     
-    
-    
-    
-    
+     
 
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
+
 
