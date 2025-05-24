@@ -133,8 +133,10 @@ def dessiner():
         rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
         if rectAvion.colliderect(rectPorte3):
             fenetre.blit(texteFin2, positionTexteFin2)
-            pygame.time.wait(2000)
-            pygame.quit()
+            pygame.display.update()                      # met à jour la fenêtre pour afficher le texte
+            pygame.time.wait(2000)                       # attend 2 secondes
+            pygame.quit()                               # ferme pygame
+            sys.exit() 
             
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
 
@@ -214,8 +216,7 @@ while continuer==1:
         proba=random.randint(0,len(Aliens)-1)
         bombes.append((Aliens[proba][0]+16,Aliens[proba][1]+30)) 
         
-
-
+        
     for positionBoule in boules:
         rectBoule = pygame.Rect(positionBoule[0], positionBoule[1], 6, 6)
 
@@ -266,9 +267,8 @@ while continuer==1:
                 continuer = 0  
                 
             # fait tomber l'avion
-
-    
-    
+            
+            
     # On vérifie si on doit inverser la direction des aliens avant qu'ils rebougent
     for alien in Aliens:
         if alien[1] + m >= 450 or alien[1] + m <= 100:
@@ -279,9 +279,7 @@ while continuer==1:
     for i in range(len(Aliens)):
         if positionAvion != (-1, -1):
             Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
-
-    
-            
+                  
     while (-1,-1) in boules:
         boules.remove((-1,-1))
     
@@ -313,9 +311,9 @@ while continuer==1:
             boules.remove(positionBoule)
             break  
     
-        
-
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
+
+
 
