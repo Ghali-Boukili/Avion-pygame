@@ -131,11 +131,11 @@ def dessiner():
         fenetre.blit(afficheNiveau, (10,480))
         
         rectAvion =  pygame.Rect(positionAvion[0],positionAvion[1], 72, 48 )
-        if rectAvion.colliderect(rectPorte3):
+        if rectAvion.colliderect(rectPorte3) and niveau==10:
             fenetre.blit(texteFin2, positionTexteFin2)
-            pygame.display.update()                      # met à jour la fenêtre pour afficher le texte
-            pygame.time.wait(2000)                       # attend 2 secondes
-            pygame.quit()                               # ferme pygame
+            pygame.display.update()                     
+            pygame.time.wait(2000)                       
+            pygame.quit()                               
             sys.exit() 
             
     pygame.display.flip() # Rafraichissement complet de la fenêtre avec les dernières opérations de dessin
