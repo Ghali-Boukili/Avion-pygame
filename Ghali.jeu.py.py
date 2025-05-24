@@ -75,6 +75,7 @@ a = 3 # vitesse des nuages
 niveau= 1
 score = 0
 m=2 # vitesse des aliens
+b = 5 # vitesse des bombes
 
 vies = 3
 
@@ -88,6 +89,7 @@ rectPorte1 = pygame.Rect(Porte1[0], Porte1[1], 50, 3)
 rectPorte2 = pygame.Rect(Porte2[0], Porte2[1], 50, 3)
 rectPorte3 = pygame.Rect(Porte3[0], Porte1[1], 2, 62)
 
+bruitTirAvion = pygame.mixer.Sound("bruitTirAvion.mp3") 
 
 debutJeu = False 
 
@@ -136,7 +138,7 @@ def dessiner():
             pygame.quit()                               
             sys.exit()
         
-        if vies == 0:
+        if vies == 0 and positionAvion[1]>500:
             fenetre.blit(texteFin, positionTexteFin)
             pygame.display.update()                      
             pygame.time.wait(4000)                       
@@ -177,8 +179,10 @@ def gererClavierEtSouris():
             positionAvion = ( positionAvion[0] + 2 , positionAvion[1])
         #if touchesPressees[pygame.K_LEFT] == True and positionAvion[0]>0:
             positionAvion = ( positionAvion[0] , positionAvion[1]+2)
-    #else :
-        #if
+        
+         
+        if touchesPressees[pygame.K_SPACE] == True and nbB>0:  # bruit à chaque tire
+            bruitTirAvion.play()
 
 # On crée une nouvelle horloge qui nous permettra de fixer la vitesse de rafraichissement de notre fenêtre
 clock = pygame.time.Clock()
@@ -200,11 +204,7 @@ while continuer==1:
     for i in range(len(Nuages)):
         Nuages[i] = (Nuages[i][0]+a, Nuages[i][1])
         if Nuages[i][0] > 800:
-            Nuages[i] = nouveauxNuages # reviens à la position initiale
-        if score != 0 :
-            niveau += 1
-            a += 0.05
-            score = 1
+            Nuages[i] = nouveauxNuages # reviens à la position initiale 
                 
     
     for i in range(len(boules)):
@@ -213,15 +213,16 @@ while continuer==1:
             boules[i]=(-1,-1)
         
     for i in range(len(bombes)):
-        bombes[i] = (bombes[i][0] + 5, bombes[i][1])
+        bombes[i] = (bombes[i][0] + b, bombes[i][1])
         if bombes[i][0] > 800:
             bombes[i] = (-1, -1)
     
-    
-    if random.randint(0,100)<3: # 2 tirés
+    t =3
+    if random.randint(0,100)<t: # 3 tires au début
         proba=random.randint(0,len(Aliens)-1)
         bombes.append((Aliens[proba][0]+16,Aliens[proba][1]+30)) 
-        
+        if len(Aliens)==0:
+            t+=1 
         
     for positionBoule in boules:
         rectBoule = pygame.Rect(positionBoule[0], positionBoule[1], 6, 6)
@@ -273,7 +274,8 @@ while continuer==1:
                 continuer = 0  
                 
             # fait tomber l'avion
-            
+     
+    
             
     # On vérifie si on doit inverser la direction des aliens avant qu'ils rebougent
     for alien in Aliens:
@@ -285,7 +287,8 @@ while continuer==1:
     for i in range(len(Aliens)):
         if positionAvion != (-1, -1):
             Aliens[i] = (Aliens[i][0], Aliens[i][1] + m)
-                  
+            
+    # effacer              
     while (-1,-1) in boules:
         boules.remove((-1,-1))
     
@@ -298,8 +301,9 @@ while continuer==1:
     if len(Aliens) == 0:
         if niveau < 10:
             niveau += 1
-            bombes[i] = (bombes[i][0] + 5, bombes[i][1])
-            m +=2 
+            bombes[i] = (bombes[i][0] + b, bombes[i][1])
+            m +=2
+            b +=1
             nbB = 40
         else:
             m = 0
@@ -321,3 +325,4 @@ while continuer==1:
 ## A la fin, lorsque l'on sortira de la boucle, on demandera à Pygame de quitter proprement
 pygame.quit()
 sys.exit()
+
